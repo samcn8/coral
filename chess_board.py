@@ -34,7 +34,6 @@ class Board():
         # for three-fold repetition
         self.zobrist_history = []
 
-
         # Is it white's turn?
         self.whites_turn = True
 
@@ -65,6 +64,7 @@ class Board():
         """
         String representation of the board for printing
         """
+        
         board_str = ""
         for row in range(8):
             board_str += str(row) + "  "

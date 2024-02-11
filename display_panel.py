@@ -79,7 +79,6 @@ class DisplayPanel(tk.Frame):
 
         self.special_state_white = None
         self.special_state_black = None
-        self.update_player_text()
 
         # Bind mouse
         self.player_info_canvas.bind("<Button-1>", self.mouse_click)
@@ -107,11 +106,12 @@ class DisplayPanel(tk.Frame):
             "None": (-1, -1)
         }
         self.time_control_clicked = tk.StringVar()
-        self.time_control_clicked.set(list(self.time_control_options.keys())[5])
+        self.time_control_clicked.set(list(self.time_control_options.keys())[11])
         time_controls_dropdown = tk.OptionMenu(game_options_frame, self.time_control_clicked, *self.time_control_options.keys())
         time_controls_dropdown.config(background="white", highlightbackground = "white")
         time_controls_dropdown.pack(side = tk.LEFT)
         self.time_control_clicked.trace_add("write", self.time_control_callback)
+        self.time_control_callback(None, None, None)
 
         # Engine limit frame
         engine_limit_frame = tk.Frame(self, bg="white")
@@ -157,10 +157,22 @@ class DisplayPanel(tk.Frame):
             "300s": 300000,
         }
         self.engine_time_clicked = tk.StringVar()
-        self.engine_time_clicked.set(list(self.engine_time_options.keys())[0])
+        self.engine_time_clicked.set(list(self.engine_time_options.keys())[3])
         engine_time_dropdown = tk.OptionMenu(engine_limit_frame, self.engine_time_clicked, *self.engine_time_options.keys())
         engine_time_dropdown.config(background="white", highlightbackground = "white")
         engine_time_dropdown.pack(side = tk.LEFT)
+
+        # Engine hash size frame
+        engine_hash_frame = tk.Frame(self, bg="white")
+        engine_hash_frame.pack(side = tk.TOP, pady=5)
+        tk.Label(engine_hash_frame, background="White", text="  Engine hash table size in MB: ").pack(side = tk.LEFT)
+        self.hash_size_entry = tk.Entry(engine_hash_frame, width = 5)
+        self.hash_size_entry.pack(side = tk.LEFT)
+        hash_button = tk.Button(engine_hash_frame, highlightbackground = "white", text="Apply", command = self.update_engine_hash)
+        hash_button.pack(side = tk.LEFT)
+
+        # Set initial player text
+        self.update_player_text()
 
         # Highlight moves
         self.highlight_last_move = tk.BooleanVar()
@@ -219,6 +231,16 @@ class DisplayPanel(tk.Frame):
             self.gui.end_game()
             self.update_player_text()
 
+    def update_engine_hash(self):
+        # TODO: Ensure engine(s) support this hash size
+        try:
+            hash_int = int(self.hash_size_entry.get())
+        except ValueError:
+            return
+        if hash_int > 0 and hash_int < 20000:
+            self.gui.engine_hash_size = hash_int
+            self.gui.update_engine_hash()
+
     def time_control_callback(self, var, index, mode):
         vals = self.time_control_options[self.time_control_clicked.get()]
         self.gui.time_remaining_ms = [vals[0], vals[0]]
@@ -226,7 +248,6 @@ class DisplayPanel(tk.Frame):
 
     def attach_openings(self, openings):
         self.openings = openings
-        
 
     def update_show_valid_moves(self):
         self.gui.show_valid_moves = self.show_valid_moves.get()

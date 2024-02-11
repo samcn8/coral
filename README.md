@@ -19,6 +19,22 @@ The following features are implemented:
 
 Coral is named after one of my children's hermit crabs.  Coral (the hermit crab) always likes to switch to the prettiest shell available.  Hopefully Coral (the chess GUI) will be as aesthetically pleasing as the shells.
 
+## Running
+
+Coral is a Python program that uses Tkinter for cross-platform graphics and Pillow for image processing.
+
+First, install Python3 (and pip) if your system does not already have it: https://www.python.org/downloads/.
+
+Next, install the requirements via pip:
+```
+pip3 install -r requirements.txt
+```
+
+Finally, run Coral like this:
+```
+python3 coral.py
+```
+
 ## Contributing
 
 Since this is just a personal hobby project, I'm not currently accepting pull requests.  However, you are free to use the code in your own GUI development in accordance with the [GNU General Public License version 3](LICENSE) (GPL v3).

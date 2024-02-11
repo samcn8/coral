@@ -37,6 +37,9 @@ class ChessGUI(tk.Canvas):
         self.computer_move_finished = False
         self.kill_thread = False
 
+        # Hash size in MB for external engines (-1 means default)
+        self.engine_hash_size = -1
+
         # Contains (best_move, value, moves analyzed, max depth, time took, pv line)
         self.selected_computer_move = None
 
@@ -136,8 +139,7 @@ class ChessGUI(tk.Canvas):
         while (output != "uciok"):
             output = self.external_engine_process[color].stdout.readline().strip()
             print("From external engine:", output)
-        print("To external engine:", "setoption name Hash value 2000")
-        self.external_engine_process[color].stdin.write("setoption name Hash value 2000\n")
+        self.update_engine_hash()
         print("To external engine:", "ucinewgame")
         self.external_engine_process[color].stdin.write("ucinewgame\n")
         print("To external engine:", "isready")
@@ -278,6 +280,13 @@ class ChessGUI(tk.Canvas):
                 self.external_engine_process[color].stdin.write("stop\n")
 
         self.game_active = False
+
+    def update_engine_hash(self):
+        if self.engine_hash_size > 0:
+            for i in range(2):
+                if self.player_type[i] == PlayerType.EXTERNAL_ENGINE and self.external_engine_process[i]:
+                    print("To external engine:", "setoption name Hash value", self.engine_hash_size)
+                    self.external_engine_process[i].stdin.write("setoption name Hash value " + str(self.engine_hash_size) + "\n")
 
     def do_move(self, start_row, start_col, end_row, end_col):
 

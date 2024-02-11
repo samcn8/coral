@@ -20,7 +20,6 @@ def algebraic_notation(start_row, start_col, end_row, end_col, all_valid_moves, 
     else:
         is_promotion = False
 
-    #p = board.squares[start_row][start_col].upper()
     capture = board.squares[end_row][end_col] != "." or is_en_passant
 
     # Check for short and long castle
