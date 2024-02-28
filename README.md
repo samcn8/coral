@@ -6,8 +6,6 @@ Coral is an open source, cross-platform UCI chess GUI written in Python.
 
 This is a "from scratch" Python chess GUI that is compatible with Universal Chess Interface (UCI) engines.
 
-To run, you must have Python 3 and tkinter installed.
-
 The following features are implemented:
  * User friendly chess GUI with optional highlighting of previous move and all legal moves
  * Cross-platform by use of the tkinter graphics library
@@ -30,10 +28,22 @@ Next, install the requirements via pip:
 pip3 install -r requirements.txt
 ```
 
+You may have to install tkinter for your system.  For instance, on Ubuntu you can do:
+```
+sudo apt install python3-tk
+```
+
+On macOS with Homebrew, you can do:
+```
+brew install python-tk
+```
+
 Finally, run Coral like this:
 ```
 python3 coral.py
 ```
+
+Note that most of my testing has been done in a macOS environment and so fonts, etc, probably look best in macOS.
 
 ## Contributing
 

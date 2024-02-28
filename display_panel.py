@@ -31,7 +31,7 @@ class DisplayPanel(tk.Frame):
         self.blacks_captured_images = {"Q":[], "R":[], "N":[], "B":[], "P":[]}
 
         # Heading
-        heading1 = tk.Label(self, background="White", text="Coral Chess GUI by Sam Nelson", font = (gui.font, 20, 'bold'))
+        heading1 = tk.Label(self, background="White", text="Coral Chess GUI by Sam Nelson", font = (gui.font, 14, 'bold'))
         heading1.pack(side = tk.TOP)
         heading2 = tk.Label(self, background="White", text="https://www.github.com/samcn8/coral", font = (gui.font, 10, 'bold'))
         heading2.pack(side = tk.TOP)
@@ -312,9 +312,9 @@ class DisplayPanel(tk.Frame):
             black_width = 4
             black_font = "bold"
         self.player_info_canvas.itemconfig(self.player1_box, width = white_width)
-        self.player_info_canvas.itemconfig(self.player1_name, text = wt, font = (self.gui.font, 15, white_font))
+        self.player_info_canvas.itemconfig(self.player1_name, text = wt, font = (self.gui.font, 14, white_font))
         self.player_info_canvas.itemconfig(self.player2_box, width = black_width)
-        self.player_info_canvas.itemconfig(self.player2_name, text = bt, font = (self.gui.font, 15, black_font))
+        self.player_info_canvas.itemconfig(self.player2_name, text = bt, font = (self.gui.font, 14, black_font))
 
     def update_time_display(self):
         color = 0 if self.gui.board.whites_turn else 1
