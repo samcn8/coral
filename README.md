@@ -61,6 +61,8 @@ It is most common to limit the engine by time instead of depth.  One good option
 
 The engine hash table size should be set according to the memory on your system.  With modern computers, setting this value to something like 2000MB (2GB) is reasonable if you have at least 2GB of memory free.  Do not set this value larger than the amount of memory you have available on your system or performance will suffer.  The higher this value is set, the stronger the engine will typically play.
 
+To allow for variety when playing against an engine, you can choose to load a [PGN](https://en.wikipedia.org/wiki/Portable_Game_Notation) formated opening book.  If one is loaded, Coral will play from the opening book for the first 8 ply on behalf of any engine.  It will not consult the engine until either 8 ply has been reached or the gameplay has deviated from a line in the opening book.  To clear a loaded opening book, simply open the file loading dialog and immediately close it.
+
 You can play two engines (or the same engine) against each other by loading an engine for both the white and black players.  Note that all engine limiting and hash values will be the same for both engines.
 
 Click "New Game" when ready to start a new game.  For human players, click once to select the piece to move and then click a second time on the destination square.  Dragging and dropping pieces is not currently supported.

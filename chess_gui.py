@@ -4,6 +4,7 @@ import rulebook as rules
 import threading
 import subprocess
 import time
+import pgn_loader
 from player_type import PlayerType 
 
 class ChessGUI(tk.Canvas):
@@ -39,6 +40,10 @@ class ChessGUI(tk.Canvas):
 
         # Hash size in MB for external engines (-1 means default)
         self.engine_hash_size = -1
+
+        # Opening book used for engines
+        self.engine_opening_book = pgn_loader.PGNOpeningBook()
+        self.max_ply_for_opening_use = 8
 
         # Contains (best_move, value, moves analyzed, max depth, time took, pv line)
         self.selected_computer_move = None
@@ -146,6 +151,14 @@ class ChessGUI(tk.Canvas):
         self.external_engine_process[color].stdin.write("isready\n")
         output = self.external_engine_process[color].stdout.readline().strip()
         print("From external engine:", output)
+        return True
+
+    def load_engine_opening_book(self, filename):
+        if filename == "":
+            self.engine_opening_book.clear()
+            return False
+        self.engine_opening_book.load_opening_book_pgn(filename)
+        print("Loaded opening book: ", filename)
         return True
 
     def square_color(self, row, col):
@@ -528,6 +541,21 @@ class ChessGUI(tk.Canvas):
             self.computer_move_finished = True
 
     def prepare_computer_move(self):
+
+        # Check whether we can bypass the computer by using the opening book
+        if len(self.san_moves) < self.max_ply_for_opening_use:
+            # Select a next potential move, from the book, at (weighted) random
+            potential_move = self.engine_opening_book.get_next_move_random(self.san_moves.copy())
+            # Go through each possible valid move until we find the one that matches the SAN, then make it
+            if potential_move:
+                for (sr, sc), ms in self.all_valid_moves.items():
+                    for m in ms:
+                        v_move = rules.algebraic_notation(sr, sc, m[0], m[1], self.all_valid_moves, self.board)
+                        if v_move == potential_move:
+                            self.do_move(sr, sc, m[0], m[1])
+                            return
+
+        # If we get this far, then we must ask the engine to search
         with self.engine_thread_lock:
             self.computer_move_finished = False
         if self.display:

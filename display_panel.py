@@ -171,6 +171,14 @@ class DisplayPanel(tk.Frame):
         hash_button = tk.Button(engine_hash_frame, highlightbackground = "white", text="Apply", command = self.update_engine_hash)
         hash_button.pack(side = tk.LEFT)
 
+        # Computer opening book frame
+        computer_opening_book_frame = tk.Frame(self, bg="white")
+        computer_opening_book_frame.pack(side = tk.TOP, pady=5)
+        self.computer_opening_book_label = tk.Label(computer_opening_book_frame, background="White", text="Engine PGN opening book: (none)")
+        self.computer_opening_book_label.pack(side = tk.LEFT)
+        book_button = tk.Button(computer_opening_book_frame, highlightbackground = "white", text="Load Book", command = self.update_engine_book)
+        book_button.pack(side = tk.LEFT)
+
         # Set initial player text
         self.update_player_text()
 
@@ -187,7 +195,7 @@ class DisplayPanel(tk.Frame):
         valid_moves_checkbox.pack(side = tk.TOP, anchor = tk.W)
 
         # Game moves
-        self.move_text_panel = st.ScrolledText(self, width = 60, height = 6, background="white", highlightbackground="black", highlightthickness=1, borderwidth = 0)
+        self.move_text_panel = st.ScrolledText(self, width = 60, height = 5, background="white", highlightbackground="black", highlightthickness=1, borderwidth = 0)
         self.move_text_panel.pack(side = tk.TOP, pady = 5)
         self.opening_text = "Game Moves"
         self.move_text = ""
@@ -196,7 +204,7 @@ class DisplayPanel(tk.Frame):
         self.move_text_panel.configure(state ='disabled') 
 
         # Engine stats
-        self.engine_stats_panel = st.ScrolledText(self, width = 60, height = 6, background="white", highlightbackground="black", highlightthickness=1, borderwidth = 0)
+        self.engine_stats_panel = st.ScrolledText(self, width = 60, height = 5, background="white", highlightbackground="black", highlightthickness=1, borderwidth = 0)
         self.engine_stats_panel.pack(side = tk.TOP, pady = 5)
         self.update_engine_text_panel("Engine Information")
 
@@ -240,6 +248,18 @@ class DisplayPanel(tk.Frame):
         if hash_int > 0 and hash_int < 20000:
             self.gui.engine_hash_size = hash_int
             self.gui.update_engine_hash()
+
+    def update_engine_book(self):
+        filename = fd.askopenfilename(filetypes=[("PGN files", "*.pgn")])
+        label_text = "Engine PGN opening book: "
+        if self.gui.load_engine_opening_book(filename):
+            # Ensure the file name is not too long, for display purposes (limit to 8 chars)
+            fname = filename.split("/")[-1]
+            if len(fname) > 12:
+                fname = fname[:12] + "..."
+            self.computer_opening_book_label.config(text = label_text + fname)
+        else:
+            self.computer_opening_book_label.config(text = label_text + "(none)")
 
     def time_control_callback(self, var, index, mode):
         vals = self.time_control_options[self.time_control_clicked.get()]
